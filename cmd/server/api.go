@@ -1,15 +1,33 @@
-package server
+package main
 
 import (
 	"context"
+	"fmt"
 	"os"
 	"time"
 
+	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 )
 
+var (
+	mdbName string
+	mdbURI  string
+	mdb     mongo.Database
+)
+
+func main() {
+	fmt.Println("Init Api")
+
+}
+
+func init() {
+	godotenv.Load()
+	mdbURI = os.Getenv("MONGO_URI")
+	mdbName = os.Getenv("MONGO_DBNAME")
+}
 func initMongo(uri string, dbName string) *mongo.Database {
 	client, err := mongo.NewClient(options.Client().ApplyURI(uri))
 	if err != nil {
