@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"fmt"
+	"log"
 	"os"
 	"time"
 
@@ -19,7 +19,7 @@ var (
 )
 
 func main() {
-	fmt.Println("Init Api")
+	log.Println("Init Api")
 
 }
 
