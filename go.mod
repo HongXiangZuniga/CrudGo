@@ -5,6 +5,7 @@ go 1.17
 require go.mongodb.org/mongo-driver v1.7.3
 
 require (
+	github.com/coreos/etcd v3.3.27+incompatible
 	github.com/go-stack/stack v1.8.0 // indirect
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/joho/godotenv v1.3.0
@@ -16,4 +17,5 @@ require (
 	go.uber.org/zap v1.19.1
 	golang.org/x/crypto v0.0.0-20200302210943-78000ba7a073 // indirect
 	golang.org/x/text v0.3.5 // indirect
+	gopkg.in/mgo.v2 v2.0.0-20190816093944-a6b53ec6cb22
 )
