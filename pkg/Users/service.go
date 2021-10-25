@@ -1,6 +1,9 @@
 package users
 
-import "go.uber.org/zap"
+import (
+	"github.com/HongXiangZuniga/CrudGoExample/pkg/utils"
+	"go.uber.org/zap"
+)
 
 type UserServices interface {
 	GetUser(email string) (*User, error)
@@ -19,14 +22,25 @@ func NewUserServices(logger *zap.Logger, repoMongo UsersMongoRepo) UserServices 
 }
 
 func (port *port) GetUser(email string) (*User, error) {
-	return nil, nil
+	user, err := port.repoMongo.FindUser(email)
+	if err != nil {
+		return nil, err
+	}
+	return user, nil
 }
 func (port *port) UpdateUser(user User) error {
 	return nil
 }
 func (port *port) CreateUser(newUser User) error {
-	return nil
+	_, err := port.repoMongo.FindUser(newUser.Email)
+	if err == nil {
+		/*User is exist*/
+		return utils.UserisExistError()
+	}
+	err = port.repoMongo.CreateUser(newUser)
+	return err
 }
 func (port *port) DeleteUser(email string) error {
-	return nil
+	err := port.repoMongo.DeleteUser(email)
+	return err
 }
