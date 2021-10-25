@@ -14,6 +14,10 @@ type port struct {
 	repoMongo UsersMongoRepo
 }
 
+func NewUserServices(logger *zap.Logger, repoMongo UsersMongoRepo) UserServices {
+	return &port{logger, repoMongo}
+}
+
 func (port *port) GetUser(email string) (*User, error) {
 	return nil, nil
 }
