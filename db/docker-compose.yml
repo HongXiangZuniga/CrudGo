@@ -1,0 +1,14 @@
+version: "3.3"
+services:
+  mongo:
+    image: "mongo"
+    networks:
+      testing_net:
+        ipv4_address: 172.24.0.4
+
+networks:
+    testing_net:
+        ipam:
+            driver: default
+            config:
+                - subnet: 172.24.0.0/16
