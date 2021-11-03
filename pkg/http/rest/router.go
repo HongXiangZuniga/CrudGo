@@ -32,10 +32,14 @@ func NewHandler(userHandler UsersHandlers) *gin.Engine {
 		MaxAge:        12 * time.Hour,
 	}
 	r.Use(cors.New(corsCfg))
-	version := r.Group("/")
+	api := r.Group("/")
 	{
-		version.Use(TokenAuthMiddleware())
-		version.GET("/", userHandler.GetUserById)
+		api.Use(TokenAuthMiddleware())
+		users := r.Group("user")
+		{
+			users.GET("", userHandler.GetUserById)
+		}
+
 	}
 	return r
 }
