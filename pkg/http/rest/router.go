@@ -38,6 +38,7 @@ func NewHandler(userHandler UsersHandlers) *gin.Engine {
 		{
 			users.Use(TokenAuthMiddleware())
 			users.GET("/id/:id", userHandler.GetUserById)
+			users.GET("/country/:country", userHandler.GetUserByCountry)
 		}
 
 	}
