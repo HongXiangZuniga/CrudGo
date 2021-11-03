@@ -28,11 +28,15 @@ func main() {
 	usersServices := users.NewUserServices(usersRepo)
 	usersHandler := rest.NewUsersHandler(usersServices)
 	r := rest.NewHandler(usersHandler)
-	err := r.Run(":4000")
-	if err != nil {
-		log.Println("Error")
+	if os.Getenv("PORT") == "" {
+		log.Println("Api not run for: PORT Not found")
 	} else {
-		log.Println("")
+		err := r.Run(":" + os.Getenv("PORT"))
+		if err != nil {
+			log.Println("Api not run for: " + err.Error())
+		} else {
+			log.Println("Api ok")
+		}
 	}
 
 }
