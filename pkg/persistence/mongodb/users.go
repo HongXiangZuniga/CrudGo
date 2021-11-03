@@ -29,14 +29,14 @@ func (stg *storage) FindUser(id int) (*users.User, error) {
 	}
 	var userSearched bson.M
 	err := collection.FindOne(ctx, filter).Decode(&userSearched)
-	if err == nil {
+	if err != nil {
 		return nil, err
 	}
 	user := users.User{
-		Id:        userSearched["id"].(int),
+		Id:        userSearched["id"].(int32),
 		Name:      userSearched["name"].(string),
 		Email:     userSearched["email"].(string),
-		Age:       userSearched["age"].(int),
+		Age:       userSearched["age"].(int32),
 		Country:   userSearched["country"].(string),
 		EntryDate: userSearched["entryDate"].(primitive.DateTime),
 	}

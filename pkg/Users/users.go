@@ -3,10 +3,10 @@ package users
 import "go.mongodb.org/mongo-driver/bson/primitive"
 
 type User struct {
-	Id        int                `bson:"id"`
+	Id        int32              `bson:"id"`
 	Name      string             `bson:"name"`
 	Email     string             `bson:"email"`
-	Age       int                `bson:"age"`
+	Age       int32              `bson:"age"`
 	Country   string             `bson:"country"`
 	EntryDate primitive.DateTime `bson:"entryDate"`
 }
