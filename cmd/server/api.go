@@ -6,6 +6,9 @@ import (
 	"os"
 	"time"
 
+	users "github.com/HongXiangZuniga/CrudGoExample/pkg/Users"
+	"github.com/HongXiangZuniga/CrudGoExample/pkg/http/rest"
+	"github.com/HongXiangZuniga/CrudGoExample/pkg/persistence/mongodb"
 	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -20,6 +23,17 @@ var (
 
 func main() {
 	log.Println("Init Api")
+	mdb := initMongo(mdbURI, mdbName)
+	usersRepo := mongodb.NewUserRepo(mdb)
+	usersServices := users.NewUserServices(usersRepo)
+	usersHandler := rest.NewUsersHandler(usersServices)
+	r := rest.NewHandler(usersHandler)
+	err := r.Run(":4000")
+	if err != nil {
+		log.Println("Error")
+	} else {
+		log.Println("")
+	}
 
 }
 

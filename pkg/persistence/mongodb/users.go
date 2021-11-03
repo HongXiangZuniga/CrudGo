@@ -5,6 +5,7 @@ import (
 	"os"
 
 	users "github.com/HongXiangZuniga/CrudGoExample/pkg/Users"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"gopkg.in/mgo.v2/bson"
 )
@@ -19,12 +20,12 @@ func NewUserRepo(db *mongo.Database) users.UsersMongoRepo {
 	return &storage{db}
 }
 
-func (stg *storage) FindUser(email string) (*users.User, error) {
+func (stg *storage) FindUser(id int) (*users.User, error) {
 	mongoCollection := os.Getenv("MONGO_COLLECTION")
 	collection := stg.db.Collection(mongoCollection)
 	ctx := context.Background()
 	filter := bson.M{
-		email: bson.M{"$eq": email},
+		"id": bson.M{"$eq": id},
 	}
 	var userSearched bson.M
 	err := collection.FindOne(ctx, filter).Decode(&userSearched)
@@ -32,9 +33,12 @@ func (stg *storage) FindUser(email string) (*users.User, error) {
 		return nil, err
 	}
 	user := users.User{
-		Name:  userSearched["name"].(string),
-		Email: userSearched["email"].(string),
-		Age:   userSearched["age"].(int),
+		Id:        userSearched["id"].(int),
+		Name:      userSearched["name"].(string),
+		Email:     userSearched["email"].(string),
+		Age:       userSearched["age"].(int),
+		Country:   userSearched["country"].(string),
+		EntryDate: userSearched["entryDate"].(primitive.DateTime),
 	}
 	return &user, nil
 }

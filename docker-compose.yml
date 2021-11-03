@@ -2,6 +2,8 @@ version: "3.3"
 services:
   mongo:
     image: "mongo"
+    ports: 
+      - 27017:27017
     networks:
       testing_net:
         ipv4_address: 172.25.0.4
