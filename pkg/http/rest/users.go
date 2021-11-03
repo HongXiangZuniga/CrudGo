@@ -21,11 +21,7 @@ func NewUsersHandler(usersServices users.UserServices) UsersHandlers {
 }
 
 func (port *UsersPort) GetUserById(ctx *gin.Context) {
-	id, isExist := ctx.GetQuery("id")
-	if !isExist {
-		ctx.JSON(http.StatusOK, gin.H{"user": nil, "error": "Search Not found"})
-		return
-	}
+	id := ctx.Params.ByName("id")
 	idInt, err := strconv.Atoi(id)
 	if err != nil {
 		ctx.JSON(http.StatusOK, gin.H{"user": nil, "error": "Id not valid"})

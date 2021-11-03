@@ -37,7 +37,7 @@ func NewHandler(userHandler UsersHandlers) *gin.Engine {
 		users := r.Group("user")
 		{
 			users.Use(TokenAuthMiddleware())
-			users.GET("", userHandler.GetUserById)
+			users.GET("/id/:id", userHandler.GetUserById)
 		}
 
 	}
