@@ -29,18 +29,14 @@ Los endpoint:
 ```
 /user/id/:id              
 /user/country/:country
-
- ```
+```
  
  Los comandos de make son:
  ```
- 
  run
  install
  build
- 
  docker-build
  docker-run
- 
  ```
  
