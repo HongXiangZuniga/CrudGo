@@ -4,7 +4,7 @@ Este es un ejemplo sencillo de un CRUD en go sobre una base de mongo. Se deben c
 
 Variables de entornos.
  ```
-MONGO_URI=mongodb:
+MONGO_URI=
 MONGO_DBNAME=
 MONGO_COLLECTION=
 API_TOKEN=
