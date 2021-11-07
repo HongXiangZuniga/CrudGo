@@ -27,8 +27,8 @@ La estructura utilizada en el mongo es:
  
 Los endpoint:
 ```
-/user/id/:id              
-/user/country/:country
+GET /user/id/:id              
+GET /user/country/:country
 ```
  
  Los comandos de make son:
