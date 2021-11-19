@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 	"os"
+	"strconv"
 
 	users "github.com/HongXiangZuniga/CrudGoExample/pkg/Users"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -47,8 +48,16 @@ func (stg *storage) FindUsersByStringField(field, value string) (*[]User, error)
 	mongoCollection := os.Getenv("MONGO_COLLECTION")
 	collection := stg.db.Collection(mongoCollection)
 	ctx := context.Background()
-	filter := bson.M{
-		field: bson.M{"$eq": value},
+	filter := bson.M{}
+	valueInt, err := strconv.Atoi(value)
+	if err == nil {
+		filter = bson.M{
+			field: bson.M{"$eq": valueInt},
+		}
+	} else {
+		filter = bson.M{
+			field: bson.M{"$eq": value},
+		}
 	}
 	result, err := collection.Find(ctx, filter)
 	if err != nil {
