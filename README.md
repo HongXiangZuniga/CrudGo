@@ -23,23 +23,3 @@ The data mongo structure is:
 }
  ```
  
- 
-The endpoints:
-```
-/user/id/:id              
-/user/:field/:value
-```
-Commands in Make
-```
-run
-install
-build
-docker-build
-docker-run
-```
-
- For local run project:
-```
-Make run
-```
- 
