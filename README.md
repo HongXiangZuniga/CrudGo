@@ -1,14 +1,13 @@
 # CrudGo
 
 It is a example to Api Crund in go with gin-gonic in hexagonal Architecture. Create .env with this:
-
- ```
-MONGO_URI=
-MONGO_DBNAME=
-MONGO_COLLECTION=
-API_TOKEN=
-PORT=
- ```
+```
+  MONGO_URI=
+  MONGO_DBNAME=
+  MONGO_COLLECTION=
+  API_TOKEN=
+  PORT=
+```
  
 The data mongo structure is:
 
@@ -22,4 +21,19 @@ The data mongo structure is:
   "country":"Chile"
 }
  ```
+ 
+
+Commands in Make
+```
+  run
+  install
+  build
+  docker-build
+  docker-run
+```
+
+For local run project:
+```
+ Make run
+```
  
