@@ -1,5 +1,6 @@
 run:
 	docker-compose up -d
+	go mod download
 	go run cmd/server/api.go
 
 install:
