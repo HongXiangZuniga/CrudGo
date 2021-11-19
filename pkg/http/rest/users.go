@@ -10,7 +10,7 @@ import (
 
 type UsersHandlers interface {
 	GetUserById(*gin.Context)
-	GetUserByCountry(*gin.Context)
+	GetUsersByField(*gin.Context)
 }
 
 type UsersPort struct {
@@ -37,13 +37,18 @@ func (port *UsersPort) GetUserById(ctx *gin.Context) {
 	return
 }
 
-func (port *UsersPort) GetUserByCountry(ctx *gin.Context) {
-	country := ctx.Params.ByName("country")
-	if country == "" {
-		ctx.JSON(http.StatusOK, gin.H{"users": nil, "error": "country not found"})
+func (port *UsersPort) GetUsersByField(ctx *gin.Context) {
+	field := ctx.Params.ByName("field")
+	if field == "" {
+		ctx.JSON(http.StatusOK, gin.H{"users": nil, "error": "field not found"})
 		return
 	}
-	users, err := port.UsersServices.GetUsersByCountrys(country)
+	value := ctx.Params.ByName("value")
+	if value == "" {
+		ctx.JSON(http.StatusOK, gin.H{"users": nil, "error": "value not found"})
+		return
+	}
+	users, err := port.UsersServices.GetUsersByField(field, value)
 	if err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{"users": nil, "error": err.Error()})
 		return
