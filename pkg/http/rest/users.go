@@ -11,6 +11,7 @@ import (
 type UsersHandlers interface {
 	GetUserById(*gin.Context)
 	GetUsersByField(*gin.Context)
+	GetAllUsers(*gin.Context)
 }
 
 type UsersPort struct {
@@ -49,6 +50,16 @@ func (port *UsersPort) GetUsersByField(ctx *gin.Context) {
 		return
 	}
 	users, err := port.UsersServices.GetUsersByField(field, value)
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"users": nil, "error": err.Error()})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{"users": users, "error": nil})
+	return
+}
+
+func (port *UsersPort) GetAllUsers(ctx *gin.Context) {
+	users, err := port.UsersServices.GetAllUser()
 	if err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{"users": nil, "error": err.Error()})
 		return

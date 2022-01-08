@@ -3,6 +3,7 @@ package users
 type UserServices interface {
 	GetUserById(id int) (*User, error)
 	GetUsersByField(field, value string) (*[]User, error)
+	GetAllUser() (*[]User, error)
 	UpdateUser(user User) error
 	CreateUser(newUser User) error
 	DeleteUser(email string) error
@@ -26,6 +27,14 @@ func (port *port) GetUserById(id int) (*User, error) {
 
 func (port *port) GetUsersByField(field, value string) (*[]User, error) {
 	users, err := port.repoMongo.FindUsersByStringField(field, value)
+	if err != nil {
+		return nil, err
+	}
+	return users, nil
+}
+
+func (port *port) GetAllUser() (*[]User, error) {
+	users, err := port.repoMongo.GetAllUser()
 	if err != nil {
 		return nil, err
 	}
