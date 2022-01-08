@@ -50,7 +50,17 @@ func (port *UsersPort) GetUsersByField(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, gin.H{"users": nil, "error": "value not found"})
 		return
 	}
-	users, err := port.UsersServices.GetUsersByField(field, value)
+	page, isExist := ctx.GetQuery("page")
+	if !isExist {
+		ctx.JSON(http.StatusNotFound, gin.H{"users": nil, "error": "missing page"})
+		return
+	}
+	intPage, err := strconv.Atoi(page)
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"users": nil, "error": "page no valid"})
+		return
+	}
+	users, err := port.UsersServices.GetUsersByField(field, value, intPage)
 	if err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{"users": nil, "error": err.Error()})
 		return
