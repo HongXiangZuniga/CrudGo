@@ -1,9 +1,16 @@
 package users
 
+import (
+	"os"
+	"strconv"
+
+	"github.com/HongXiangZuniga/CrudGoExample/pkg/utils"
+)
+
 type UserServices interface {
 	GetUserById(id int) (*User, error)
 	GetUsersByField(field, value string) (*[]User, error)
-	GetAllUser() (*[]User, error)
+	GetAllUser(page int) (*[]User, error)
 	UpdateUser(user User) error
 	CreateUser(newUser User) error
 	DeleteUser(email string) error
@@ -33,12 +40,29 @@ func (port *port) GetUsersByField(field, value string) (*[]User, error) {
 	return users, nil
 }
 
-func (port *port) GetAllUser() (*[]User, error) {
+func (port *port) GetAllUser(page int) (*[]User, error) {
 	users, err := port.repoMongo.GetAllUser()
 	if err != nil {
 		return nil, err
 	}
-	return users, nil
+	pagination := os.Getenv("ELEMENTS_TO_PAGINATE")
+	paginationInt, err := strconv.Atoi(pagination)
+	if err != nil {
+		return nil, err
+	}
+	userPagination := *users
+	if page*paginationInt > len(userPagination) {
+		return nil, utils.PageNotValid()
+	}
+	last := 0
+	if ((page * paginationInt) + paginationInt) > len(userPagination) {
+		last = len(userPagination) - page*paginationInt
+		last = (page * paginationInt) + last
+	} else {
+		last = ((page * paginationInt) + paginationInt)
+	}
+	userPagination = userPagination[page*paginationInt : last]
+	return &userPagination, nil
 }
 
 func (port *port) UpdateUser(user User) error {

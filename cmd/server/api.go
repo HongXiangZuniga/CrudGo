@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 	"os"
+	"strconv"
 	"time"
 
 	users "github.com/HongXiangZuniga/CrudGoExample/pkg/Users"
@@ -45,6 +46,16 @@ func init() {
 	godotenv.Load()
 	mdbURI = os.Getenv("MONGO_URI")
 	mdbName = os.Getenv("MONGO_DBNAME")
+	pagination := os.Getenv("ELEMENTS_TO_PAGINATE")
+	if pagination == "" {
+		log.Println("missing quantity elements of paginate")
+		os.Exit(0)
+	}
+	_, err := strconv.Atoi(pagination)
+	if err != nil {
+		log.Println("quantity elements of paginate not valid")
+		os.Exit(0)
+	}
 }
 func initMongo(uri string, dbName string) *mongo.Database {
 	client, err := mongo.NewClient(options.Client().ApplyURI(uri))

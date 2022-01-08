@@ -7,6 +7,7 @@ It is a example to Api Crund in go with gin-gonic in hexagonal Architecture. Cre
   MONGO_COLLECTION=
   API_TOKEN=
   PORT=
+  ELEMENTS_TO_PAGINATE=
 ```
  
 The data mongo structure is:
