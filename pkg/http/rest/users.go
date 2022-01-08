@@ -11,6 +11,7 @@ import (
 type UsersHandlers interface {
 	GetUserById(*gin.Context)
 	GetUsersByField(*gin.Context)
+	GetAllUsers(*gin.Context)
 }
 
 type UsersPort struct {
@@ -39,6 +40,7 @@ func (port *UsersPort) GetUserById(ctx *gin.Context) {
 
 func (port *UsersPort) GetUsersByField(ctx *gin.Context) {
 	field := ctx.Params.ByName("field")
+	_, _ = ctx.GetQuery("page")
 	if field == "" {
 		ctx.JSON(http.StatusOK, gin.H{"users": nil, "error": "field not found"})
 		return
@@ -48,7 +50,37 @@ func (port *UsersPort) GetUsersByField(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, gin.H{"users": nil, "error": "value not found"})
 		return
 	}
-	users, err := port.UsersServices.GetUsersByField(field, value)
+	page, isExist := ctx.GetQuery("page")
+	if !isExist {
+		ctx.JSON(http.StatusNotFound, gin.H{"users": nil, "error": "missing page"})
+		return
+	}
+	intPage, err := strconv.Atoi(page)
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"users": nil, "error": "page no valid"})
+		return
+	}
+	users, err := port.UsersServices.GetUsersByField(field, value, intPage)
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"users": nil, "error": err.Error()})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{"users": users, "error": nil})
+	return
+}
+
+func (port *UsersPort) GetAllUsers(ctx *gin.Context) {
+	page, isExist := ctx.GetQuery("page")
+	if !isExist {
+		ctx.JSON(http.StatusNotFound, gin.H{"users": nil, "error": "missing page"})
+		return
+	}
+	intPage, err := strconv.Atoi(page)
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"users": nil, "error": "page no valid"})
+		return
+	}
+	users, err := port.UsersServices.GetAllUser(intPage)
 	if err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{"users": nil, "error": err.Error()})
 		return
