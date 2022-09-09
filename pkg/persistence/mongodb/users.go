@@ -89,7 +89,6 @@ func (stg *storage) FindUsersByStringField(field, value string) (*[]User, error)
 			field: bson.M{"$eq": value},
 		}
 	}
-	log.Println(filter)
 	result, err := collection.Find(ctx, filter)
 	if err != nil {
 		return nil, err
