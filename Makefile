@@ -9,6 +9,8 @@ install:
 build:
 	go build cmd/server/api.go
 
+unit-test:
+	go test ./test
 
 docker-build:
 	docker build \

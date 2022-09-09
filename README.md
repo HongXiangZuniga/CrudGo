@@ -31,10 +31,12 @@ Commands in Make
   build
   docker-build
   docker-run
+  unit-testing
 ```
 
 For local run project:
 ```
  Make run
 ```
+And load to data example in folder db
  
