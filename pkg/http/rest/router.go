@@ -40,6 +40,8 @@ func NewHandler(userHandler UsersHandlers) *gin.Engine {
 			users.GET("/", userHandler.GetAllUsers)
 			users.GET("/:id", userHandler.GetUserById)
 			users.GET("/search/:field/:value", userHandler.GetUsersByField)
+			users.DELETE("/:id", userHandler.DeleteUser)
+			users.POST("/", userHandler.CreateUser)
 		}
 
 	}

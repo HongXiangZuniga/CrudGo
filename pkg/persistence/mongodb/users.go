@@ -2,13 +2,16 @@ package mongodb
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"os"
 	"strconv"
+	"time"
 
 	users "github.com/HongXiangZuniga/CrudGoExample/pkg/Users"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	"gopkg.in/mgo.v2/bson"
 )
 
@@ -114,30 +117,47 @@ func (stg *storage) FindUsersByStringField(field, value string) (*[]User, error)
 	return &Users, nil
 }
 
-/*func (stg *storage) CreateUser(user users.User) error {
+func (stg *storage) CreateUser(newUser users.User) error {
+	var lastUser User
 	mongoCollection := os.Getenv("MONGO_COLLECTION")
 	collection := stg.db.Collection(mongoCollection)
 	ctx := context.Background()
-	_, err := collection.InsertOne(ctx, user)
+	options := options.Find().SetSort(map[string]int{"id": -1}).SetLimit(1)
+	result, err := collection.Find(ctx, bson.M{}, options)
+	if err != nil {
+		fmt.Println(err.Error())
+		return err
+	}
+	for result.Next(ctx) {
+		err = result.Decode(&lastUser)
+		if err != nil {
+			fmt.Println(err.Error())
+			return err
+		}
+	}
+	newUser.Id = lastUser.Id + 1
+	newUser.EntryDate = primitive.NewDateTimeFromTime(time.Now())
+	_, err = collection.InsertOne(ctx, newUser)
 	if err != nil {
 		return err
 	}
+
 	return nil
 }
 
-func (stg *storage) DeleteUser(email string) error {
+func (stg *storage) DeleteUser(idUser int) error {
 	mongoCollection := os.Getenv("MONGO_COLLECTION")
 	collection := stg.db.Collection(mongoCollection)
 	ctx := context.Background()
 	filter := bson.M{
-		email: bson.M{"$eq": email},
+		"id": bson.M{"$eq": idUser},
 	}
 	_, err := collection.DeleteOne(ctx, filter)
 	return err
 }
 
+/*
 func (stg *storage) Update(user users.User) error {
 
 	return nil
-
 */

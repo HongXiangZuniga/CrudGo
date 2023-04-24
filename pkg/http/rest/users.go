@@ -1,6 +1,9 @@
 package rest
 
 import (
+	"encoding/json"
+	"io/ioutil"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -12,6 +15,8 @@ type UsersHandlers interface {
 	GetUserById(*gin.Context)
 	GetUsersByField(*gin.Context)
 	GetAllUsers(*gin.Context)
+	DeleteUser(*gin.Context)
+	CreateUser(*gin.Context)
 }
 
 type UsersPort struct {
@@ -83,5 +88,61 @@ func (port *UsersPort) GetAllUsers(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(http.StatusOK, gin.H{"users": users, "error": nil})
+	return
+}
+
+func (port *UsersPort) DeleteUser(ctx *gin.Context) {
+	parameterid := ctx.Params.ByName("id")
+	if parameterid == "" {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "id not found"})
+		return
+	}
+	id, err := strconv.Atoi(parameterid)
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"error": "id not found"})
+		return
+	}
+	err = port.UsersServices.DeleteUser(id)
+	if err != nil {
+		ctx.JSON(http.StatusNotAcceptable, gin.H{"error": err.Error()})
+		return
+	}
+	ctx.JSON(http.StatusNoContent, gin.H{})
+	return
+}
+
+func (port *UsersPort) CreateUser(ctx *gin.Context) {
+	var newUser users.User
+	bodyBytes, err := ioutil.ReadAll(ctx.Request.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
+	bodyString := string(bodyBytes)
+	err = json.Unmarshal([]byte(bodyString), &newUser)
+	if err != nil {
+		ctx.JSON(http.StatusNotAcceptable, gin.H{"error": err.Error()})
+		return
+	}
+	if newUser.Email == "" {
+		ctx.JSON(http.StatusNotAcceptable, gin.H{"error": "Email is empty"})
+		return
+	}
+	if newUser.Age == 0 {
+		ctx.JSON(http.StatusNotAcceptable, gin.H{"error": "Age is empty or is 0"})
+		return
+	}
+	if newUser.Name == "" {
+		ctx.JSON(http.StatusNotAcceptable, gin.H{"error": "Name is empty"})
+		return
+	}
+	if newUser.Country == "" {
+		ctx.JSON(http.StatusNotAcceptable, gin.H{"error": "Country is empty"})
+		return
+	}
+	err = port.UsersServices.CreateUser(newUser)
+	if err != nil {
+		ctx.JSON(http.StatusNotAcceptable, gin.H{"error": err.Error()})
+	}
+	ctx.JSON(http.StatusNoContent, gin.H{})
 	return
 }
