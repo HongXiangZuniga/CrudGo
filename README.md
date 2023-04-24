@@ -24,13 +24,13 @@ The data mongo structure is:
  ```
 
 Endpoint
- '''
+```
 GET    /user?page=x <page default is 0>
 GET    /user/id/:id              
 GET    /search/:field/:value <page default is 0>
 DELETE /user/:id
 POST   /user/
- '''
+```
  
 
 Commands in Make
