@@ -22,6 +22,13 @@ The data mongo structure is:
   "country":"Chile"
 }
  ```
+
+Endpoint
+ '''
+GET    /user?page=x <page is obligatorie>
+GET    /user/id/:id              
+GET    /search/:field/:value
+ '''
  
 
 Commands in Make

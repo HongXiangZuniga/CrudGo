@@ -1,16 +1,11 @@
-version: "3.3"
+version: "3.9"
 services:
-  mongo:
-    image: "mongo"
-    ports: 
-      - 27017:27017
-    networks:
-      testing_net:
-        ipv4_address: 172.25.0.4
-
-networks:
-    testing_net:
-        ipam:
-            driver: default
-            config:
-                - subnet: 172.25.0.0/16
+  mongodb:
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data:/.data/db

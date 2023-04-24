@@ -40,7 +40,6 @@ func (port *UsersPort) GetUserById(ctx *gin.Context) {
 
 func (port *UsersPort) GetUsersByField(ctx *gin.Context) {
 	field := ctx.Params.ByName("field")
-	_, _ = ctx.GetQuery("page")
 	if field == "" {
 		ctx.JSON(http.StatusOK, gin.H{"users": nil, "error": "field not found"})
 		return
@@ -52,8 +51,7 @@ func (port *UsersPort) GetUsersByField(ctx *gin.Context) {
 	}
 	page, isExist := ctx.GetQuery("page")
 	if !isExist {
-		ctx.JSON(http.StatusNotFound, gin.H{"users": nil, "error": "missing page"})
-		return
+		page = "0"
 	}
 	intPage, err := strconv.Atoi(page)
 	if err != nil {
@@ -72,8 +70,7 @@ func (port *UsersPort) GetUsersByField(ctx *gin.Context) {
 func (port *UsersPort) GetAllUsers(ctx *gin.Context) {
 	page, isExist := ctx.GetQuery("page")
 	if !isExist {
-		ctx.JSON(http.StatusNotFound, gin.H{"users": nil, "error": "missing page"})
-		return
+		page = "0"
 	}
 	intPage, err := strconv.Atoi(page)
 	if err != nil {
