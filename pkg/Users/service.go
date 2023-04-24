@@ -14,7 +14,7 @@ type UserServices interface {
 	GetAllUser(page int) (*[]User, error)
 	UpdateUser(user User) error
 	CreateUser(newUser User) error
-	DeleteUser(email string) error
+	DeleteUser(id int) error
 }
 
 type port struct {
@@ -88,9 +88,8 @@ func (port *port) UpdateUser(user User) error {
 	return nil
 }
 func (port *port) CreateUser(newUser User) error {
-	return nil
+	return port.repoMongo.CreateUser(newUser)
 }
-func (port *port) DeleteUser(email string) error {
-
-	return nil
+func (port *port) DeleteUser(id int) error {
+	return port.repoMongo.DeleteUser(id)
 }
