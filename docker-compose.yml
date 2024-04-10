@@ -8,4 +8,7 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - ./data:/.data/db
+      - ./db/dataExample.json:/dataExample.json
+      - ./init.sh:/init.sh
+      - ./data:/data/db   # Corregido el montaje del volumen para los datos de MongoDB
+    command: bash -c './init.sh'
