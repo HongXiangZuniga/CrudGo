@@ -13,6 +13,7 @@ import (
 type mockMongoRepo struct {
 }
 
+// comentario
 func (m *mockMongoRepo) GetAllUser() (*[]users.User, error) {
 	users := []users.User{
 		{Id: 1, Name: "Hong Xiang", Email: "hongxiang17@gmail.com", Age: 28, Country: "Chile", EntryDate: primitive.NewDateTimeFromTime(time.Now())},
