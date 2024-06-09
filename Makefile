@@ -1,4 +1,5 @@
 run:
+	chmod +x db/init-mongo.sh
 	docker-compose up -d
 	go mod download
 	go run cmd/server/api.go
@@ -18,6 +19,7 @@ docker-build:
 	-t  portafolio:local .
 
 docker-run:
+	chmod +x db/init-mongo.sh
 	docker-compose up -d
 	docker run --rm -it -p 3000:3000 \
 	--env-file ./.env \

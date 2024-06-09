@@ -1,7 +1,6 @@
 package users
 
 import (
-	"log"
 	"os"
 	"strconv"
 
@@ -38,7 +37,6 @@ func (port *port) GetUsersByField(field, value string, page int) (*[]User, error
 	if err != nil {
 		return nil, err
 	}
-	log.Println(users)
 	pagination := os.Getenv("ELEMENTS_TO_PAGINATE")
 	paginationInt, err := strconv.Atoi(pagination)
 	if err != nil {

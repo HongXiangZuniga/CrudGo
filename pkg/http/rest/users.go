@@ -31,7 +31,7 @@ func (port *UsersPort) GetUserById(ctx *gin.Context) {
 	id := ctx.Params.ByName("id")
 	idInt, err := strconv.Atoi(id)
 	if err != nil {
-		ctx.JSON(http.StatusOK, gin.H{"user": nil, "error": "Id not valid"})
+		ctx.JSON(http.StatusNotFound, gin.H{"user": nil, "error": "Id not valid"})
 		return
 	}
 	user, err := port.UsersServices.GetUserById(idInt)
@@ -39,19 +39,18 @@ func (port *UsersPort) GetUserById(ctx *gin.Context) {
 		ctx.JSON(http.StatusNotFound, gin.H{"user": nil, "error": err.Error()})
 		return
 	}
-	ctx.JSON(http.StatusOK, gin.H{"user": user, "error": nil})
-	return
+	ctx.JSON(http.StatusOK, gin.H{"user": user})
 }
 
 func (port *UsersPort) GetUsersByField(ctx *gin.Context) {
 	field := ctx.Params.ByName("field")
 	if field == "" {
-		ctx.JSON(http.StatusOK, gin.H{"users": nil, "error": "field not found"})
+		ctx.JSON(http.StatusNotFound, gin.H{"users": nil, "error": "field not found"})
 		return
 	}
 	value := ctx.Params.ByName("value")
 	if value == "" {
-		ctx.JSON(http.StatusOK, gin.H{"users": nil, "error": "value not found"})
+		ctx.JSON(http.StatusNotFound, gin.H{"users": nil, "error": "value not found"})
 		return
 	}
 	page, isExist := ctx.GetQuery("page")
@@ -68,8 +67,7 @@ func (port *UsersPort) GetUsersByField(ctx *gin.Context) {
 		ctx.JSON(http.StatusNotFound, gin.H{"users": nil, "error": err.Error()})
 		return
 	}
-	ctx.JSON(http.StatusOK, gin.H{"users": users, "error": nil})
-	return
+	ctx.JSON(http.StatusOK, gin.H{"users": users})
 }
 
 func (port *UsersPort) GetAllUsers(ctx *gin.Context) {
@@ -87,14 +85,13 @@ func (port *UsersPort) GetAllUsers(ctx *gin.Context) {
 		ctx.JSON(http.StatusNotFound, gin.H{"users": nil, "error": err.Error()})
 		return
 	}
-	ctx.JSON(http.StatusOK, gin.H{"users": users, "error": nil})
-	return
+	ctx.JSON(http.StatusOK, gin.H{"users": users})
 }
 
 func (port *UsersPort) DeleteUser(ctx *gin.Context) {
 	parameterid := ctx.Params.ByName("id")
 	if parameterid == "" {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "id not found"})
+		ctx.JSON(http.StatusNotFound, gin.H{"error": "id not found"})
 		return
 	}
 	id, err := strconv.Atoi(parameterid)
@@ -104,11 +101,10 @@ func (port *UsersPort) DeleteUser(ctx *gin.Context) {
 	}
 	err = port.UsersServices.DeleteUser(id)
 	if err != nil {
-		ctx.JSON(http.StatusNotAcceptable, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 	ctx.JSON(http.StatusNoContent, gin.H{})
-	return
 }
 
 func (port *UsersPort) CreateUser(ctx *gin.Context) {
@@ -141,8 +137,7 @@ func (port *UsersPort) CreateUser(ctx *gin.Context) {
 	}
 	err = port.UsersServices.CreateUser(newUser)
 	if err != nil {
-		ctx.JSON(http.StatusNotAcceptable, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	}
 	ctx.JSON(http.StatusNoContent, gin.H{})
-	return
 }

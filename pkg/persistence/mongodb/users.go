@@ -89,8 +89,9 @@ func (stg *storage) FindUsersByStringField(field, value string) (*[]User, error)
 		}
 	} else {
 		filter = bson.M{
-			field: bson.M{"$eq": value},
+			field: bson.M{"$regex": primitive.Regex{Pattern: value, Options: "i"}},
 		}
+
 	}
 	result, err := collection.Find(ctx, filter)
 	if err != nil {
