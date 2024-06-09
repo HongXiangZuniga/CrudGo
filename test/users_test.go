@@ -13,7 +13,6 @@ import (
 type mockMongoRepo struct {
 }
 
-// comentario
 func (m *mockMongoRepo) GetAllUser() (*[]users.User, error) {
 	users := []users.User{
 		{Id: 1, Name: "Hong Xiang", Email: "hongxiang17@gmail.com", Age: 28, Country: "Chile", EntryDate: primitive.NewDateTimeFromTime(time.Now())},
@@ -74,6 +73,16 @@ func (m *mockMongoRepo) FindUsersByStringField(field, value string) (*[]users.Us
 	}
 	return nil, nil
 }
+
+// NoTest
+func (m *mockMongoRepo) CreateUser(newUser users.User) error {
+	return nil
+}
+
+func (m *mockMongoRepo) DeleteUser(idUser int) error {
+	return nil
+}
+
 func TestGetAllUsers(t *testing.T) {
 	err := godotenv.Load("../.env")
 	if err != nil {
