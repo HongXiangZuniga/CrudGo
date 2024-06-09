@@ -6,7 +6,6 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - ./db:/data/db
       - ./db:/docker-entrypoint-initdb.d
     networks:
       - my_mongo_net
