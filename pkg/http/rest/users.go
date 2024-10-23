@@ -8,6 +8,7 @@ import (
 	"strconv"
 
 	users "github.com/HongXiangZuniga/CrudGoExample/pkg/Users"
+	"github.com/HongXiangZuniga/CrudGoExample/pkg/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -59,12 +60,12 @@ func (port *UsersPort) GetUsersByField(ctx *gin.Context) {
 	}
 	intPage, err := strconv.Atoi(page)
 	if err != nil {
-		ctx.JSON(http.StatusNotFound, gin.H{"users": nil, "error": "page no valid"})
+		ctx.JSON(http.StatusNotFound, gin.H{"users": nil, "error": utils.PageNotValid().Error()})
 		return
 	}
 	users, err := port.UsersServices.GetUsersByField(field, value, intPage)
 	if err != nil {
-		ctx.JSON(http.StatusNotFound, gin.H{"users": nil, "error": err.Error()})
+		ctx.JSON(http.StatusNotFound, gin.H{"users": nil, "error": utils.PageNotValid().Error()})
 		return
 	}
 	ctx.JSON(http.StatusOK, gin.H{"users": users})
