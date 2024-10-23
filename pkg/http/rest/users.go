@@ -2,7 +2,7 @@ package rest
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"strconv"
@@ -117,7 +117,7 @@ func (port *UsersPort) DeleteUser(ctx *gin.Context) {
 
 func (port *UsersPort) CreateUser(ctx *gin.Context) {
 	var newUser users.User
-	bodyBytes, err := ioutil.ReadAll(ctx.Request.Body)
+	bodyBytes, err := io.ReadAll(ctx.Request.Body)
 	if err != nil {
 		log.Fatal(err)
 	}
