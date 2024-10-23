@@ -14,6 +14,7 @@ type UserServices interface {
 	UpdateUser(user User) error
 	CreateUser(newUser User) error
 	DeleteUser(id int) error
+	NextPageExist(id int) error
 }
 
 type port struct {
@@ -90,4 +91,20 @@ func (port *port) CreateUser(newUser User) error {
 }
 func (port *port) DeleteUser(id int) error {
 	return port.repoMongo.DeleteUser(id)
+}
+func (port *port) NextPageExist(page int) error {
+	users, err := port.repoMongo.GetAllUser()
+	if err != nil {
+		return err
+	}
+	pagination := os.Getenv("ELEMENTS_TO_PAGINATE")
+	paginationInt, err := strconv.Atoi(pagination)
+	if err != nil {
+		return err
+	}
+	userPagination := *users
+	if (page+1)*paginationInt > len(userPagination) {
+		return utils.PageNotValid()
+	}
+	return nil
 }

@@ -85,7 +85,15 @@ func (port *UsersPort) GetAllUsers(ctx *gin.Context) {
 		ctx.JSON(http.StatusNotFound, gin.H{"users": nil, "error": err.Error()})
 		return
 	}
-	ctx.JSON(http.StatusOK, gin.H{"users": users})
+	nextUrl := ctx.Request.URL.String()
+	prevUrl := ctx.Request.URL.String()
+	if port.UsersServices.NextPageExist(intPage) == nil {
+		nextUrl = ctx.Request.URL.Path + "?page=" + strconv.Itoa(intPage+1)
+	}
+	if intPage != 1 {
+		prevUrl = ctx.Request.URL.Path + "?page=" + strconv.Itoa(intPage-1)
+	}
+	ctx.JSON(http.StatusOK, gin.H{"users": users, "next": nextUrl, "prev": prevUrl})
 }
 
 func (port *UsersPort) DeleteUser(ctx *gin.Context) {
